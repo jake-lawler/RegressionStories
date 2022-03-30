@@ -1,3 +1,3 @@
-# Data and Measurement {#data_measurement}
+# Simulation {#simulation}
 
 Chapters 2-5 don't include models. Since I'm using this notebook to recreate models in base Stan, I haven't made notes on those chapters. I'll pick things up again for chapter 6.

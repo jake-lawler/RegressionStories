@@ -1,0 +1,22 @@
+# Background on Regression Modelling {#regression_background}
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# library(rosdata)
+# library(tidyverse)
+# library(rstanarm)
+# library(rstan)
+# library(tidybayes)
+
+options(mc.cores = parallel::detectCores())
+```
+
+
+## Stan Models
+
+
+
+## Questions
+
+
+
+## Further Reading {-}

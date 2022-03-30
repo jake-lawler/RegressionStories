@@ -1,3 +1,10 @@
 overview
 stan-models
 questions
+data_measurement
+basic_methods
+statistical_inference
+simulation
+regression_background
+stan-models-1
+questions-1

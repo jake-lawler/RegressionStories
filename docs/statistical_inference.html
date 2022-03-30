@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari</title>
+  <title>Chapter 4 Statistical Inference | Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari</title>
   <meta name="description" content="My notes on ‘Regression and Other stories’." />
   <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
+  <meta property="og:title" content="Chapter 4 Statistical Inference | Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="My notes on ‘Regression and Other stories’." />
   <meta name="github-repo" content="jake-lawler/RegressionStories" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
+  <meta name="twitter:title" content="Chapter 4 Statistical Inference | Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
   
   <meta name="twitter:description" content="My notes on ‘Regression and Other stories’." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="overview.html"/>
+<link rel="prev" href="basic_methods.html"/>
+<link rel="next" href="simulation.html"/>
 <script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -169,21 +169,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari</h1>
-<p class="author"><em>Jake Lawler</em></p>
-<p class="date"><em>2022-03-30</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>I’m reading through <em>Regression and Other Stories</em> with two goals in mind:</p>
-<ul>
-<li>try to improve my conceptual understanding of regression</li>
-<li>improve my coding of base Stan.</li>
-</ul>
-<p>I don’t plan on using this notebook to make chapter summaries like I have with other textbooks. Instead I’m just going to use it to practice writing models in Stan, and will make my chapter notes elsewhere. The idea is that I’ll need to improve my Stan skills as the models in the book get more complicated. I may use this notebook for end-of-chapter exercises also, we’ll see.</p>
-<p>I have had some previous exposure to base Stan in <a href="https://jake-lawler.github.io/rethinking/">my work-through of Statistical Rethinking</a>, so I’m not starting completely from scratch. However, I am looking forward to particularly the early portions of this book where I’ll hopefully be familiar with a lot of the material and can just focus on applying it using the Stan language.</p>
-<p>Alongside the book itself, the other text I’m going to be reading a lot of is the <a href="https://mc-stan.org/docs/2_29/stan-users-guide/index.html">Stan User Guide</a> and some of the other Stan <a href="https://mc-stan.org/users/documentation/">documentation</a>. That last link includes the reference manuals, but also some example case studies and tutorials which I imagine will be helpful.</p>
+<div id="statistical_inference" class="section level1" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Statistical Inference</h1>
+<p>Chapters 2-5 don’t include models. Since I’m using this notebook to recreate models in base Stan, I haven’t made notes on those chapters. I’ll pick things up again for chapter 6.</p>
 
 </div>
             </section>
@@ -191,8 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="overview.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="basic_methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="simulation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -223,7 +211,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/index.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/04-statistical_inference.Rmd",
 "text": "Edit"
 },
 "history": {

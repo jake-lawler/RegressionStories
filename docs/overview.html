@@ -5,25 +5,25 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 1 Overview | Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari</title>
-  <meta name="description" content="Description of Project." />
+  <meta name="description" content="My notes on ‘Regression and Other stories’." />
   <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 1 Overview | Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="Description of Project." />
-  <meta name="github-repo" content="jake-lawler/ProjectName" />
+  <meta property="og:description" content="My notes on ‘Regression and Other stories’." />
+  <meta name="github-repo" content="jake-lawler/RegressionStories" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Chapter 1 Overview | Notes on ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
   
-  <meta name="twitter:description" content="Description of Project." />
+  <meta name="twitter:description" content="My notes on ‘Regression and Other stories’." />
   
 
 <meta name="author" content="Jake Lawler" />
 
 
-<meta name="date" content="2022-03-29" />
+<meta name="date" content="2022-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-
+<link rel="next" href="data_measurement.html"/>
 <script src="libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -138,7 +138,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="1.1" data-path="overview.html"><a href="overview.html#stan-models"><i class="fa fa-check"></i><b>1.1</b> Stan Models</a></li>
 <li class="chapter" data-level="1.2" data-path="overview.html"><a href="overview.html#questions"><i class="fa fa-check"></i><b>1.2</b> Questions</a></li>
-<li class="chapter" data-level="" data-path="overview.html"><a href="overview.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="data_measurement.html"><a href="data_measurement.html"><i class="fa fa-check"></i><b>2</b> Data and Measurement</a></li>
+<li class="chapter" data-level="3" data-path="basic_methods.html"><a href="basic_methods.html"><i class="fa fa-check"></i><b>3</b> Some Basic Methods in Mathematics and Probability</a></li>
+<li class="chapter" data-level="4" data-path="statistical_inference.html"><a href="statistical_inference.html"><i class="fa fa-check"></i><b>4</b> Statistical Inference</a></li>
+<li class="chapter" data-level="5" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>5</b> Simulation</a></li>
+<li class="chapter" data-level="6" data-path="regression_background.html"><a href="regression_background.html"><i class="fa fa-check"></i><b>6</b> Background on Regression Modelling</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regression_background.html"><a href="regression_background.html#stan-models-1"><i class="fa fa-check"></i><b>6.1</b> Stan Models</a></li>
+<li class="chapter" data-level="6.2" data-path="regression_background.html"><a href="regression_background.html#questions-1"><i class="fa fa-check"></i><b>6.2</b> Questions</a></li>
+<li class="chapter" data-level="" data-path="regression_background.html"><a href="regression_background.html#further-reading"><i class="fa fa-check"></i>Further Reading</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -229,12 +238,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb8"><pre class="sourceCode stan"><code class="sourceCode stan"><span id="cb8-1"><a href="overview.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
 <span id="cb8-2"><a href="overview.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  vote[i] ~ normal(a + b * growth[i], sigma);</span>
 <span id="cb8-3"><a href="overview.html#cb8-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>According to the user manual, the vectorised form is faster.</p>
+<p><a href="https://mc-stan.org/docs/2_29/stan-users-guide/linear-regression.html#vectorization.section">This section</a> of the user manual also describes writing a regression model with more than one predictor using matrix notation. Here’s the example model they use:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode stan"><code class="sourceCode stan"><span id="cb9-1"><a href="overview.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb9-2"><a href="overview.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;   <span class="co">// number of data items</span></span>
+<span id="cb9-3"><a href="overview.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; K;   <span class="co">// number of predictors</span></span>
+<span id="cb9-4"><a href="overview.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N, K] x;   <span class="co">// predictor matrix</span></span>
+<span id="cb9-5"><a href="overview.html#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] y;      <span class="co">// outcome vector</span></span>
+<span id="cb9-6"><a href="overview.html#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-7"><a href="overview.html#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb9-8"><a href="overview.html#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> alpha;           <span class="co">// intercept</span></span>
+<span id="cb9-9"><a href="overview.html#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[K] beta;       <span class="co">// coefficients for predictors</span></span>
+<span id="cb9-10"><a href="overview.html#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;  <span class="co">// error scale</span></span>
+<span id="cb9-11"><a href="overview.html#cb9-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-12"><a href="overview.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb9-13"><a href="overview.html#cb9-13" aria-hidden="true" tabindex="-1"></a>  y ~ normal(x * beta + alpha, sigma);  <span class="co">// likelihood</span></span>
+<span id="cb9-14"><a href="overview.html#cb9-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The matrix of predictors <span class="math inline">\(x\)</span> multiplies the vector of coefficients <span class="math inline">\(\beta\)</span>. Consider trying this once you get to multiple regression in the book.</p>
+<p>That’s more or less the only model in the first chapter of <em>Regression and Other Stories</em>. so I’ll leave my notes there.</p>
 </div>
 <div id="questions" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Questions</h2>
-</div>
-<div id="further-reading" class="section level2 unnumbered">
-<h2>Further Reading</h2>
+<p>I’ve not done any of the end-of-chapter exercises for this one.</p>
 
 </div>
 </div>
@@ -243,8 +268,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data_measurement.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
