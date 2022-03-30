@@ -1,0 +1,24 @@
+# Data and Measurement {#data_measurement}
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+# library(rosdata)
+# library(tidyverse)
+# library(rstanarm)
+# library(rstan)
+# library(tidybayes)
+
+options(mc.cores = parallel::detectCores())
+```
+
+
+## Stan Models
+
+https://www.youtube.com/watch?v=pHsuIaPbNbY
+https://www.youtube.com/watch?v=xWQpEAyI5s8
+
+## Questions
+
+I've not done any of the end-of-chapter exercises for this one.
+
+
+## Further Reading {-}
