@@ -1,0 +1,189 @@
+# Generated Quantities {#generated}
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(rosdata)
+library(tidyverse)
+library(rstanarm)
+library(rstan)
+library(tidybayes)
+
+options(mc.cores = parallel::detectCores())
+```
+
+
+## Introduction to the Generated Quantities Block {-}
+
+Here's the Stan model we wrote in the last chapter:
+
+```{stan eval = FALSE, output.var=""}
+data{
+    int<lower=0> n;
+    vector[n] vote;
+    vector[n] growth;
+}
+parameters{
+    real a;
+    real b;
+    real<lower=0> sigma;
+}
+model{
+    vote ~ normal( a + b * growth , sigma );
+}
+```
+
+In the Stan code above, we used the data, parameters, and model blocks. One block that wasn't used is the (optional) generated quantities block. It runs after the sample at each iteration, and so can be used without slowing down the sampling process too much. 
+
+Let's start by seeing what variables exist in the model samples, and we can think about what's not in there that we might like to have.
+
+```{r echo = FALSE}
+m1_1b <- readRDS("models\\m1_1b.rds")
+```
+
+```{r}
+extract(m1_1b)%>%
+  names()
+```
+
+We have the three parameters we included in the model specification: the intercept $a$, the slope parameter $b$, and the scale parameter $\sigma$. The term "lp__" is unusual. According to the reference manual, it's "the log posterior density (up to a constant)". However the manual also describes it as deprecated, as says it should not be used. [This](https://www.jax.org/news-and-insights/jax-blog/2015/october/lp-in-stan-output) helpful blog post describes it a little more. At each iteration, the lp\_\_ term calculates the log likelihood of each observation given the sampled parameter values at that iteration. It then sums them, so the lp\_\_ vector has length equal to the number of iterations. 
+
+This sounds useful, so why is it deprecated and its use discouraged? It's a little over my head, but according to the above blog post, Stan scales the likelihood in such a way that the resulting log likelihood term not useful for model comparison because the scale factor changes across models. 
+
+The fact that lp\_\_ sums the log likelihoods of each observation is also a problem if we want to, say, use some importance sampling or leave-one-out approach to evaluate our models.
+
+Alright, so ignoring lp\_\_ our model above provides us with samples for three parameters. What else might we want? Some possibilities are:
+
+* Draw from the linear predictor, in the model structure above this means $\mu$ such that $\mu = a + b*x$.
+* Draw from the posterior predictive distribution, i.e. $y$ such that $y \sim \text{Normal}(\mu,\sigma)$ in the model structure above.
+* We may want the log likelihood for the reasons described above.
+* We may want to be able to do prior predictive checks without using MCMC (conditioning on no data to return the prior), which is possible but inefficient.
+
+All of these things can be done inside the generated quantities block (I believe!), and I'm going to spend the rest of this page trying to figure out how to do this.
+
+## Drawing from Linear Predictor & Posterior {-}
+
+We can use the generated quantities block to make predictions given the sampled parameters and some set of predictors.
+
+__Predictions on Existing Data__
+
+If we want to retrodict the data, i.e. make predictions from the observed predictor values to compare them to the observed outcome values we can add the following generated quantities block to our code above:
+
+```{stan eval = FALSE, output.var=""}
+generated quantities{
+  vector[n] mu_pred;
+  vector[n] y_pred;
+  for (i in 1:n) {
+    mu_pred[i] = a + b * growth[i];
+    y_pred[i] = normal_rng(mu_pred[i], sigma);
+  }
+}
+```
+
+The code above defines two new quantities, mu_pred and y_pred. mu_pred is the linear predictor i.e $\mu$ in the model structure below:
+
+$$
+\begin{aligned}
+y_i &\sim \text{Normal}(\mu_i, sigma) \\
+mu_i &= \alpha + \beta x_i
+\end{aligned}
+$$
+
+And y_pred is the posterior prediction - it includes the uncertainty induced by the $\sigma$ term. In the code above, the predictions are performed using the sampled parameter values and the existing predictor (in this case growth) values.
+
+In a simple model like this one, it's maybe overkill to define both of these quantities separately in our model. Maybe we only care about the posterior predictions. However, when we get to generalised linear models where the linear predictor is transformed before being fed into whatever distribution we're using, it will be more useful to have both.
+
+```{r echo = FALSE}
+data(hibbs)
+data_hibbs <- hibbs %>% select(vote,growth)
+
+code_gen_1 <- 
+"data{
+    int<lower=0> n;
+    vector[n] vote;
+    vector[n] growth;
+}
+parameters{
+    real a;
+    real b;
+    real<lower=0> sigma;
+}
+model{
+    vote ~ normal( a + b * growth , sigma );
+}
+generated quantities{
+  vector[n] mu_pred;
+  vector[n] y_pred;
+  for (i in 1:n) {
+    mu_pred[i] = a + b * growth[i];
+    y_pred[i] = normal_rng(mu_pred[i], sigma);
+  }
+}"
+
+# m_gen_1 <- stan_model(model_name = "m_gen_1",model_code=code_gen_1)%>%
+#             sampling(data = compose_data(data_hibbs), chains=1)
+# 
+# saveRDS(m_gen_1, file="models\\m_gen_1.rds")
+
+m_gen_1 <- readRDS(file="models\\m_gen_1.rds")
+
+```
+
+Adding the above generated quantities block to our existing model code, compiling it, and sampling makes our new quantities available to us: 
+
+
+```{r}
+extract(m_gen_1)%>%
+  names()
+```
+
+What structure do our new quantities have? The get_variables function from tidybayes tells us what variables are available to us, and this gives us a hint: 
+
+```{r}
+get_variables(m_gen_1)
+```
+
+There are 16 variables each for mu_pred and y_pred, one for each predictor value. Each of these variables has been sampled 1,000 times, so we get a full posterior distribution for each and not just a point prediction. We can extract these draws using tidybayes functions, for example:
+
+```{r}
+m_gen_1%>%
+  spread_draws(mu_pred[i], y_pred[i])%>%
+  head()
+```
+
+Let's plot them over the existing data:
+
+```{r}
+# We extract the draws from the model
+draws_gen_1 <- m_gen_1%>%
+  gather_draws(mu_pred[i], y_pred[i])%>%
+  mean_qi(.width = 0.95)%>% # specify the 95% posterior interval
+  mutate(growth = data_hibbs$growth[i]) # we need to add the predictor values to position on the x-axis
+
+
+  ggplot(data = draws_gen_1, aes(x = growth, y = .value))+
+  geom_pointinterval(aes(ymin = .lower, ymax = .upper, colour = .variable), # plot the posterior intervals
+                     position = position_dodge(width = -0.1))+
+  geom_point(data = hibbs, aes(y = vote))+ # plot the initial date
+  xlab("Average recent growth in personal income (%)")+
+  ylab("Incumbent party's vote share")
+```
+
+This probably isn't the clearest way to present these predictions, but we've proven the concept: we can extract and work with the the posterior distributions for $\mu$ and $y$.
+
+__Predictions on New Data__
+
+
+
+## Prior Predictive Checks {-}
+
+https://stackoverflow.com/questions/57703920/sampling-from-prior-without-running-a-separate-model
+
+## Adding the Log Likelihood {-}
+
+https://vasishth.github.io/bayescogsci/book/cross-validation-in-stan.html#psis-loo-cv-in-stan
+
+Further Reading {-}
+
+To make predictions on new data: User Manual page 43
+
+Blog post on lp\_\_:
+https://www.jax.org/news-and-insights/jax-blog/2015/october/lp-in-stan-output

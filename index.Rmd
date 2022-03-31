@@ -1,5 +1,5 @@
 --- 
-title: "Notes on 'Regression and Other stories' by Gelman, Hill & Vehtari"
+title: "Learning Stan with 'Regression and Other stories' by Gelman, Hill & Vehtari"
 author: "Jake Lawler"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -9,7 +9,7 @@ bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
 github-repo: jake-lawler/RegressionStories
-description: "My notes on 'Regression and Other stories'."
+description: "My notes on the probabalistic programming language Stan, made while working through 'Regression and Other stories'."
 ---
 
 # Preface {-}
@@ -28,7 +28,16 @@ I'm reading through *Regression and Other Stories* with two goals in mind:
 * try to improve my conceptual understanding of regression
 * improve my coding of base Stan.
 
-I don't plan on using this notebook to make chapter summaries like I have with other textbooks. Instead I'm just going to use it to practice writing models in Stan, and will make my chapter notes elsewhere. The idea is that I'll need to improve my Stan skills as the models in the book get more complicated. I may use this notebook for end-of-chapter exercises also, we'll see.
+It's the second point that I want to be reflected in this notebook. I don't plan on making chapter summaries like [I have with other textbooks](jake-lawler.github.io/home). Instead I'm going to use these notes to practice writing models in Stan. The idea is that I'll need to improve my Stan skills as the models in the book get more complicated. Because of this, my notes will not follow the structure of 'Regression and Other Stories', but will instead start with an introduction to Stan, and will gradually layer in complexity as I improve. I don't yet have a clear sense of the structure I'm going to go for, but a rough initial guess at chapter headers might be:
+
+* An Introduction to Stan
+* Generated Quantities - Priors & Predictions
+* Multiple Predictors
+* Model Comparison - PSIS & LOO
+* Diagnostics
+* Logistic Regression
+* Other GLMs
+* Multilevel Models
 
 I have had some previous exposure to base Stan in [my work-through of Statistical Rethinking](https://jake-lawler.github.io/rethinking/), so I'm not starting completely from scratch. However, I am looking forward to particularly the early portions of this book where I'll hopefully be familiar with a lot of the material and can just focus on applying it using the Stan language.
 

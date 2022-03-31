@@ -1,4 +1,4 @@
-# Overview {#overview}
+# An Introduction to Stan {#introduction}
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 library(rosdata)
@@ -11,7 +11,7 @@ options(mc.cores = parallel::detectCores())
 ```
 
 
-## Stan Models
+## Stan Basics {-}
 
 The first model in the book concerns the relationship between incumbent vote share and income growth in U.S. elections.
 
@@ -113,6 +113,8 @@ draws1_1b <- m1_1b %>%
 
 This looks to be about the same line. Any differences might come from slightly different approaches to default priors in the two packages.
 
+### Vectorisation in Stan {-}
+
 The code above used a vectorised form of model specification:
 
 ```{stan eval = FALSE, output.var = ""}
@@ -148,11 +150,8 @@ model {
 }
 ```
 
-The matrix of predictors $x$ multiplies the vector of coefficients $\beta$. Consider trying this once you get to multiple regression in the book.
+The matrix of predictors $x$ multiplies the vector of coefficients $\beta$. Consider trying this way of coding models once you get to multiple regression in the book.
 
 That's more or less the only model in the first chapter of *Regression and Other Stories*. so I'll leave my notes there.
 
-## Questions
-
-I've not done any of the end-of-chapter exercises for this one.
 

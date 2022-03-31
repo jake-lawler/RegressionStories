@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Generated Quantities | Learning Stan with ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari</title>
+  <meta name="description" content="My notes on the probabalistic programming language Stan, made while working through ‘Regression and Other stories’." />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Generated Quantities | Learning Stan with ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="My notes on the probabalistic programming language Stan, made while working through ‘Regression and Other stories’." />
+  <meta name="github-repo" content="jake-lawler/RegressionStories" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Generated Quantities | Learning Stan with ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari" />
+  
+  <meta name="twitter:description" content="My notes on the probabalistic programming language Stan, made while working through ‘Regression and Other stories’." />
+  
+
+<meta name="author" content="Jake Lawler" />
+
+
+<meta name="date" content="2022-03-31" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+
+<script src="libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> An Introduction to Stan</a>
+<ul>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#stan-basics"><i class="fa fa-check"></i>Stan Basics</a>
+<ul>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html#vectorisation-in-stan"><i class="fa fa-check"></i>Vectorisation in Stan</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="generated.html"><a href="generated.html"><i class="fa fa-check"></i><b>2</b> Generated Quantities</a>
+<ul>
+<li class="chapter" data-level="" data-path="generated.html"><a href="generated.html#introduction-to-the-generated-quantities-block"><i class="fa fa-check"></i>Introduction to the Generated Quantities Block</a></li>
+<li class="chapter" data-level="" data-path="generated.html"><a href="generated.html#drawing-from-linear-predictor-posterior"><i class="fa fa-check"></i>Drawing from Linear Predictor &amp; Posterior</a></li>
+<li class="chapter" data-level="" data-path="generated.html"><a href="generated.html#prior-predictive-checks"><i class="fa fa-check"></i>Prior Predictive Checks</a></li>
+<li class="chapter" data-level="" data-path="generated.html"><a href="generated.html#adding-the-log-likelihood"><i class="fa fa-check"></i>Adding the Log Likelihood</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Learning Stan with ‘Regression and Other stories’ by Gelman, Hill &amp; Vehtari</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="generated" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Generated Quantities</h1>
+<div id="introduction-to-the-generated-quantities-block" class="section level2 unnumbered">
+<h2>Introduction to the Generated Quantities Block</h2>
+<p>Here’s the Stan model we wrote in the last chapter:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode stan"><code class="sourceCode stan"><span id="cb10-1"><a href="generated.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span>{</span>
+<span id="cb10-2"><a href="generated.html#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; n;</span>
+<span id="cb10-3"><a href="generated.html#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">vector</span>[n] vote;</span>
+<span id="cb10-4"><a href="generated.html#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">vector</span>[n] growth;</span>
+<span id="cb10-5"><a href="generated.html#cb10-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-6"><a href="generated.html#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span>{</span>
+<span id="cb10-7"><a href="generated.html#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">real</span> a;</span>
+<span id="cb10-8"><a href="generated.html#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">real</span> b;</span>
+<span id="cb10-9"><a href="generated.html#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="cb10-10"><a href="generated.html#cb10-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-11"><a href="generated.html#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span>{</span>
+<span id="cb10-12"><a href="generated.html#cb10-12" aria-hidden="true" tabindex="-1"></a>    vote ~ normal( a + b * growth , sigma );</span>
+<span id="cb10-13"><a href="generated.html#cb10-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In the Stan code above, we used the data, parameters, and model blocks. One block that wasn’t used is the (optional) generated quantities block. It runs after the sample at each iteration, and so can be used without slowing down the sampling process too much.</p>
+<p>Let’s start by seeing what variables exist in the model samples, and we can think about what’s not in there that we might like to have.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="generated.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract</span>(m1_1b)<span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="generated.html#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot;     &quot;b&quot;     &quot;sigma&quot; &quot;lp__&quot;</code></pre>
+<p>We have the three parameters we included in the model specification: the intercept <span class="math inline">\(a\)</span>, the slope parameter <span class="math inline">\(b\)</span>, and the scale parameter <span class="math inline">\(\sigma\)</span>. The term “lp__” is unusual. According to the reference manual, it’s “the log posterior density (up to a constant)”. However the manual also describes it as deprecated, as says it should not be used. <a href="https://www.jax.org/news-and-insights/jax-blog/2015/october/lp-in-stan-output">This</a> helpful blog post describes it a little more. At each iteration, the lp__ term calculates the log likelihood of each observation given the sampled parameter values at that iteration. It then sums them, so the lp__ vector has length equal to the number of iterations.</p>
+<p>This sounds useful, so why is it deprecated and its use discouraged? It’s a little over my head, but according to the above blog post, Stan scales the likelihood in such a way that the resulting log likelihood term not useful for model comparison because the scale factor changes across models.</p>
+<p>The fact that lp__ sums the log likelihoods of each observation is also a problem if we want to, say, use some importance sampling or leave-one-out approach to evaluate our models.</p>
+<p>Alright, so ignoring lp__ our model above provides us with samples for three parameters. What else might we want? Some possibilities are:</p>
+<ul>
+<li>Draw from the linear predictor, in the model structure above this means <span class="math inline">\(\mu\)</span> such that <span class="math inline">\(\mu = a + b*x\)</span>.</li>
+<li>Draw from the posterior predictive distribution, i.e. <span class="math inline">\(y\)</span> such that <span class="math inline">\(y \sim \text{Normal}(\mu,\sigma)\)</span> in the model structure above.</li>
+<li>We may want the log likelihood for the reasons described above.</li>
+<li>We may want to be able to do prior predictive checks without using MCMC (conditioning on no data to return the prior), which is possible but inefficient.</li>
+</ul>
+<p>All of these things can be done inside the generated quantities block (I believe!), and I’m going to spend the rest of this page trying to figure out how to do this.</p>
+</div>
+<div id="drawing-from-linear-predictor-posterior" class="section level2 unnumbered">
+<h2>Drawing from Linear Predictor &amp; Posterior</h2>
+<p>We can use the generated quantities block to make predictions given the sampled parameters and some set of predictors.</p>
+<p><strong>Predictions on Existing Data</strong></p>
+<p>If we want to retrodict the data, i.e. make predictions from the observed predictor values to compare them to the observed outcome values we can add the following generated quantities block to our code above:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode stan"><code class="sourceCode stan"><span id="cb13-1"><a href="generated.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span>{</span>
+<span id="cb13-2"><a href="generated.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[n] mu_pred;</span>
+<span id="cb13-3"><a href="generated.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[n] y_pred;</span>
+<span id="cb13-4"><a href="generated.html#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:n) {</span>
+<span id="cb13-5"><a href="generated.html#cb13-5" aria-hidden="true" tabindex="-1"></a>    mu_pred[i] = a + b * growth[i];</span>
+<span id="cb13-6"><a href="generated.html#cb13-6" aria-hidden="true" tabindex="-1"></a>    y_pred[i] = normal_rng(mu_pred[i], sigma);</span>
+<span id="cb13-7"><a href="generated.html#cb13-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-8"><a href="generated.html#cb13-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The code above defines two new quantities, mu_pred and y_pred. mu_pred is the linear predictor i.e <span class="math inline">\(\mu\)</span> in the model structure below:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_i &amp;\sim \text{Normal}(\mu_i, sigma) \\
+mu_i &amp;= \alpha + \beta x_i
+\end{aligned}
+\]</span></p>
+<p>And y_pred is the posterior prediction - it includes the uncertainty induced by the <span class="math inline">\(\sigma\)</span> term. In the code above, the predictions are performed using the sampled parameter values and the existing predictor (in this case growth) values.</p>
+<p>In a simple model like this one, it’s maybe overkill to define both of these quantities separately in our model. Maybe we only care about the posterior predictions. However, when we get to generalised linear models where the linear predictor is transformed before being fed into whatever distribution we’re using, it will be more useful to have both.</p>
+<p>Adding the above generated quantities block to our existing model code, compiling it, and sampling makes our new quantities available to us:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="generated.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">extract</span>(m_gen_1)<span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="generated.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot;       &quot;b&quot;       &quot;sigma&quot;   &quot;mu_pred&quot; &quot;y_pred&quot;  &quot;lp__&quot;</code></pre>
+<p>What structure do our new quantities have? The get_variables function from tidybayes tells us what variables are available to us, and this gives us a hint:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="generated.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_variables</span>(m_gen_1)</span></code></pre></div>
+<pre><code>##  [1] &quot;a&quot;             &quot;b&quot;             &quot;sigma&quot;         &quot;mu_pred[1]&quot;   
+##  [5] &quot;mu_pred[2]&quot;    &quot;mu_pred[3]&quot;    &quot;mu_pred[4]&quot;    &quot;mu_pred[5]&quot;   
+##  [9] &quot;mu_pred[6]&quot;    &quot;mu_pred[7]&quot;    &quot;mu_pred[8]&quot;    &quot;mu_pred[9]&quot;   
+## [13] &quot;mu_pred[10]&quot;   &quot;mu_pred[11]&quot;   &quot;mu_pred[12]&quot;   &quot;mu_pred[13]&quot;  
+## [17] &quot;mu_pred[14]&quot;   &quot;mu_pred[15]&quot;   &quot;mu_pred[16]&quot;   &quot;y_pred[1]&quot;    
+## [21] &quot;y_pred[2]&quot;     &quot;y_pred[3]&quot;     &quot;y_pred[4]&quot;     &quot;y_pred[5]&quot;    
+## [25] &quot;y_pred[6]&quot;     &quot;y_pred[7]&quot;     &quot;y_pred[8]&quot;     &quot;y_pred[9]&quot;    
+## [29] &quot;y_pred[10]&quot;    &quot;y_pred[11]&quot;    &quot;y_pred[12]&quot;    &quot;y_pred[13]&quot;   
+## [33] &quot;y_pred[14]&quot;    &quot;y_pred[15]&quot;    &quot;y_pred[16]&quot;    &quot;lp__&quot;         
+## [37] &quot;accept_stat__&quot; &quot;stepsize__&quot;    &quot;treedepth__&quot;   &quot;n_leapfrog__&quot; 
+## [41] &quot;divergent__&quot;   &quot;energy__&quot;</code></pre>
+<p>There are 16 variables each for mu_pred and y_pred, one for each predictor value. Each of these variables has been sampled 1,000 times, so we get a full posterior distribution for each and not just a point prediction. We can extract these draws using tidybayes functions, for example:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="generated.html#cb18-1" aria-hidden="true" tabindex="-1"></a>m_gen_1<span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="generated.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread_draws</span>(mu_pred[i], y_pred[i])<span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="generated.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## Warning: `gather_()` was deprecated in tidyr 1.2.0.
+## Please use `gather()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## # A tibble: 6 x 6
+## # Groups:   i [1]
+##       i mu_pred .chain .iteration .draw y_pred
+##   &lt;int&gt;   &lt;dbl&gt;  &lt;int&gt;      &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
+## 1     1    52.2      1          1     1   50.8
+## 2     1    55.1      1          2     2   56.3
+## 3     1    55.6      1          3     3   58.4
+## 4     1    51.4      1          4     4   49.2
+## 5     1    54.8      1          5     5   52.2
+## 6     1    54.2      1          6     6   55.3</code></pre>
+<p>Let’s plot them over the existing data:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="generated.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We extract the draws from the model</span></span>
+<span id="cb21-2"><a href="generated.html#cb21-2" aria-hidden="true" tabindex="-1"></a>draws_gen_1 <span class="ot">&lt;-</span> m_gen_1<span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="generated.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather_draws</span>(mu_pred[i], y_pred[i])<span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="generated.html#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean_qi</span>(<span class="at">.width =</span> <span class="fl">0.95</span>)<span class="sc">%&gt;%</span> <span class="co"># specify the 95% posterior interval</span></span>
+<span id="cb21-5"><a href="generated.html#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">growth =</span> data_hibbs<span class="sc">$</span>growth[i]) <span class="co"># we need to add the predictor values to position on the x-axis</span></span>
+<span id="cb21-6"><a href="generated.html#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="generated.html#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="generated.html#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> draws_gen_1, <span class="fu">aes</span>(<span class="at">x =</span> growth, <span class="at">y =</span> .value))<span class="sc">+</span></span>
+<span id="cb21-9"><a href="generated.html#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_pointinterval</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> .lower, <span class="at">ymax =</span> .upper, <span class="at">colour =</span> .variable), <span class="co"># plot the posterior intervals</span></span>
+<span id="cb21-10"><a href="generated.html#cb21-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="sc">-</span><span class="fl">0.1</span>))<span class="sc">+</span></span>
+<span id="cb21-11"><a href="generated.html#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> hibbs, <span class="fu">aes</span>(<span class="at">y =</span> vote))<span class="sc">+</span> <span class="co"># plot the initial date</span></span>
+<span id="cb21-12"><a href="generated.html#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Average recent growth in personal income (%)&quot;</span>)<span class="sc">+</span></span>
+<span id="cb21-13"><a href="generated.html#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Incumbent party&#39;s vote share&quot;</span>)</span></code></pre></div>
+<p><img src="02-generated_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>This probably isn’t the clearest way to present these predictions, but we’ve proven the concept: we can extract and work with the the posterior distributions for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p><strong>Predictions on New Data</strong></p>
+</div>
+<div id="prior-predictive-checks" class="section level2 unnumbered">
+<h2>Prior Predictive Checks</h2>
+<p><a href="https://stackoverflow.com/questions/57703920/sampling-from-prior-without-running-a-separate-model" class="uri">https://stackoverflow.com/questions/57703920/sampling-from-prior-without-running-a-separate-model</a></p>
+</div>
+<div id="adding-the-log-likelihood" class="section level2 unnumbered">
+<h2>Adding the Log Likelihood</h2>
+<p><a href="https://vasishth.github.io/bayescogsci/book/cross-validation-in-stan.html#psis-loo-cv-in-stan" class="uri">https://vasishth.github.io/bayescogsci/book/cross-validation-in-stan.html#psis-loo-cv-in-stan</a></p>
+<p>Further Reading {-}</p>
+<p>To make predictions on new data: User Manual page 43</p>
+<p>Blog post on lp__:
+<a href="https://www.jax.org/news-and-insights/jax-blog/2015/october/lp-in-stan-output" class="uri">https://www.jax.org/news-and-insights/jax-blog/2015/october/lp-in-stan-output</a></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/02-generated.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
